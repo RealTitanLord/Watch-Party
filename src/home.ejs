@@ -1,26 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" data-bs-theme="auto">
   <head>
-    <script src="../../assets/js/color-modes.js"></script>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
     <meta name="generator" content="Hugo 0.122.0" />
     <title>WatchParty</title>
-
-    <link
-      rel="canonical"
-      href="https://getbootstrap.com/docs/5.3/examples/cover/"
-    />
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"
-    />
-
-    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/cover.css">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -100,8 +88,21 @@
         display: block !important;
       }
     </style>
+    <script>      // Show modal when "Create Party" button is clicked
+  $(document).ready(function() {
+    $('#createPartyBtn').click(function () {
+        $('#createJoinRoomModal').modal('show');
+    });
 
-    <link href="../Home/cover.css" rel="stylesheet" />
+    $('#createRoomBtn').click(function () {
+        window.location.href = '/create-room';
+    });
+
+    $('#joinRoomBtn').click(function () {
+        window.location.href = '/join-room';
+    });
+});
+      </script>
   </head>
   <body class="d-flex h-100 text-center text-bg-dark">
 
@@ -111,28 +112,50 @@
           <h3 class="float-md-start mb-0">WatchParty</h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a
-              class="nav-link fw-bold py-1 px-0"
+              class="nav-link fw-bold py-1 px-0 active"
               aria-current="page"
-              href="../Home/index.html"
+              href="#"
               >Home</a
             >
-            <a class="nav-link fw-bold py-1 px-0 active"
-               aria-current="page" 
-               href="#">Features</a>
-            <a class="nav-link fw-bold py-1 px-0" href="../Home/contact.html">Contact</a>
+            <a class="nav-link fw-bold py-1 px-0" href="features">Features</a>
+            <a class="nav-link fw-bold py-1 px-0" href="contact">Contact</a>
           </nav>
         </div>
       </header>
 
       <main class="px-3">
-       
-      </main>
+        <h1>Fun With Friends Should Never Ends</h1>
+        <p class="lead">
+            Experience the joy of watching videos with friends, no matter where they are
+        </p>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-lg btn-light fw-bold border-white bg-white create" id="createPartyBtn">
+  Create Party
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="createJoinRoomModal" tabindex="-1" aria-labelledby="createJoinRoomModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="createJoinRoomModalLabel">Create or Join Room</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <button id="createRoomBtn" class="btn btn-primary">Create Room</button>
+              <button id="joinRoomBtn" class="btn btn-primary">Join Room</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay"></div>
+    </main>
 
       <footer class="text-center" style="background-color: rgba(0, 0, 0, 0.05)">
         <div class="container p-1">
           <section class="mb-3">
             <a
-              id="social"
               data-mdb-ripple-init
               class="btn btn-outline btn-floating m-1"
               href="https://www.instagram.com/secret_justine"
@@ -152,7 +175,6 @@
               ></i
             ></a>
             <a
-              id="social"
               data-mdb-ripple-init
               class="btn btn-outline btn-floating m-1"
               href="#!"
@@ -170,7 +192,6 @@
                 /></svg
             ></a>
             <a
-              id="social"
               data-mdb-ripple-init
               class="btn btn-outline btn-floating m-1"
               href="https://linkedin.com/in/ap2004"
@@ -189,7 +210,6 @@
                 /></svg
             ></a>
             <a
-              id="social"
               data-mdb-ripple-init
               class="btn btn-outline btn-floating m-1"
               href="https://github.com/RealTitanLord"
@@ -223,6 +243,7 @@
         </div>
       </footer>
     </div>
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/home.js"></script>
   </body>
-</html>
+    </html>
