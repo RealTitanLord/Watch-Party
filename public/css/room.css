@@ -20,17 +20,52 @@ body {
       );
     background-size: var(--s) calc(var(--s) * 0.577);
   }
-  
+
+.justify-content-between {
+    justify-content: space-between !important;
+    text-shadow: 2px 2px rgba(0, 0, 0, 1);
+    background-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1)) !important;
+}
+
+.cover-container {
+  max-width: 42em;
+}
+
+.nav-masthead .nav-link {
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom: 0.25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.25);
+}
+
+.nav-masthead .nav-link + .nav-link {
+  margin-left: 1rem;
+}
+
+.nav-masthead .active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
 .container{
     border: 1px solid blue;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction:column;
+    aspect-ratio: 100 / 29;
     position: relative;
-    width: auto;
+    width: 100%;
+    max-width: 200vh;
     background-color: rgba(89, 82, 82, 0.599);
 }
 .card {
     width: 260px;
-    background-color: #fff;
+    background-color: #242424;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -49,7 +84,8 @@ body {
   }
   
   .chat-window {
-    height: 500px;
+    height: 100%;
+    min-height: 500px;
     overflow-y: scroll;
   }
   
@@ -74,6 +110,10 @@ body {
     font-size: 14px;
   }
   
+  .message-input:hover{
+    box-shadow: 0 4px 18px #4b4b4b;
+  }
+
   .send-button {
     border: none;
     outline: none;
@@ -85,8 +125,8 @@ body {
   }
   
   .send-button:hover {
-    background-color: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
+    background-color: #2c2b2c;
+    color: rgb(255, 255, 255);
     box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
   }
   .button {
@@ -140,13 +180,18 @@ body {
   bottom: 10px;
   right: 20px;
   position: absolute;
-  border: 5px solid rebeccapurple;
 }
 .video-container video {
   max-width: 100%;
   height: auto; 
-  border: 5px solid orangered;
 }
 .modal-body{
   opacity: 0;
+}
+.fa-minus{
+  position: absolute;
+  right: 11px;
+  top: -12px;
+  font-size: 250%;
+  cursor: pointer;
 }

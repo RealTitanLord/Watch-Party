@@ -44,10 +44,48 @@ document.querySelector("#settings-btn").addEventListener("click", function () {
 	myModal.show();
 });
 
+// Chatbox
+$(document).on('click', '.chat-header i.fa-minus', function (e) {
+    var $this = $(this);
+    var $panel = $this.closest('.card');
+    var $panelBody = $panel.find('.chat-window');
+
+    if (!$this.hasClass('panel-collapsed')) {
+        $panelBody.slideUp();
+        $this.addClass('panel-collapsed');
+        $this.text('+');
+    } else {
+        $panelBody.slideDown();
+        $this.removeClass('panel-collapsed');
+        $this.text('-');
+    }
+});
+
+$(document).on('focus', '.chat-input input.message-input', function (e) {
+    var $panel = $(this).closest('.card');
+    var $minimizeChat = $panel.find('.fa-minus');
+
+    if ($minimizeChat.hasClass('panel-collapsed')) {
+        $panel.find('.chat-window').slideDown();
+        $minimizeChat.removeClass('panel-collapsed');
+        $minimizeChat.text('-');
+    }
+});
+
+$(document).on('click', '#new_chat', function (e) {
+    var $lastChatWindow = $(".chat-window:last-child");
+    var lastChatWindowMargin = parseInt($lastChatWindow.css("margin-left")) || 0;
+    var sizeTotal = lastChatWindowMargin + 400;
+    alert(sizeTotal);
+    var $clone = $("#chat_window_1").clone().appendTo(".container");
+    $clone.css("margin-left", sizeTotal);
+});
+
+
+//socket logic
 const userName = prompt("Please enter your name:");
 
 if (userName) {
-	// eslint-disable-next-line no-undef
 	socket.emit("join-room", roomId, userName);
 } else {
 	alert("You must enter a name to join the room.");
