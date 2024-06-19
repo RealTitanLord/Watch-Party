@@ -2,7 +2,7 @@
   "name": "watch-sync",
   "version": "1.0.0",
   "description": "Watch Videos,Anime and movies Together",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "devStart": "nodemon server.js"
   },
@@ -16,6 +16,8 @@
     "jquery": "^3.7.1",
     "peerjs": "^1.5.2",
     "socket.io": "^4.7.5",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

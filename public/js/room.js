@@ -7,11 +7,11 @@ document.getElementById("audio-btn").addEventListener("click", function () {
 	if (micIcon.textContent === "mic") {
 		micIcon.textContent = "mic_off";
 		textDiv.textContent = "Unmute";
-		textDivStyle.margin = "0";
+		// textDivStyle.margin = "0";
 	} else {
 		micIcon.textContent = "mic";
 		textDiv.textContent = "Mute";
-		textDivStyle.margin = "0 1.5em";
+		// textDivStyle.margin = "0 1em";
 	}
 });
 //Changes Video Icon
@@ -45,42 +45,12 @@ document.querySelector("#settings-btn").addEventListener("click", function () {
 });
 
 // Chatbox
-$(document).on('click', '.chat-header i.fa-minus', function (e) {
-    var $this = $(this);
-    var $panel = $this.closest('.card');
-    var $panelBody = $panel.find('.chat-window');
 
-    if (!$this.hasClass('panel-collapsed')) {
-        $panelBody.slideUp();
-        $this.addClass('panel-collapsed');
-        $this.text('+');
-    } else {
-        $panelBody.slideDown();
-        $this.removeClass('panel-collapsed');
-        $this.text('-');
-    }
+io.on("connection", (socket) => {
+  socket.on("chat message", (msg) => {
+    console.log("message: " + msg);
+  });
 });
-
-$(document).on('focus', '.chat-input input.message-input', function (e) {
-    var $panel = $(this).closest('.card');
-    var $minimizeChat = $panel.find('.fa-minus');
-
-    if ($minimizeChat.hasClass('panel-collapsed')) {
-        $panel.find('.chat-window').slideDown();
-        $minimizeChat.removeClass('panel-collapsed');
-        $minimizeChat.text('-');
-    }
-});
-
-$(document).on('click', '#new_chat', function (e) {
-    var $lastChatWindow = $(".chat-window:last-child");
-    var lastChatWindowMargin = parseInt($lastChatWindow.css("margin-left")) || 0;
-    var sizeTotal = lastChatWindowMargin + 400;
-    alert(sizeTotal);
-    var $clone = $("#chat_window_1").clone().appendTo(".container");
-    $clone.css("margin-left", sizeTotal);
-});
-
 
 //socket logic
 const userName = prompt("Please enter your name:");

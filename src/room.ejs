@@ -1,116 +1,121 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" class="h-100" data-bs-theme="auto">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>WatchParty Room</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0"
     />
-    <script src="/js/jquery.min.js" defer></script>
-    <link rel="stylesheet" href="/css/room.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+
+    <link rel="stylesheet" href="/css/cover.css">
+    <link rel="stylesheet" href="/css/room.css">
+<!-- <script src="/socket.io/socket.io.js"></script>
+   <script>
+      var socket = io();
+      socket.on('newclientconnect',function(data){
+               document.body.innerHTML = '';
+               document.write(data.description);
+      });
+   </script> -->
   </head>
-  <body>
-    <header class="mb-auto">
-      <div class="d-flex justify-content-between">
-        <h3
-          class="float-md-start m-2"
-          style="text-shadow: 2px 2px rgba(0, 0, 0, 1); background-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1)) !important;"
-        >
-          WatchParty
-        </h3>
-        <nav class="nav nav-masthead justify-content-center float-md-end m-2" 
-        style="text-shadow: 2px 2px rgba(0, 0, 0, 1); background-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1)) !important;">
-          <a class="nav-link fw-bold py-1 px-0" aria-current="page" href="/"
-            >Home</a
-          >
-          <a class="nav-link fw-bold py-1 px-0" href="/features">Features</a>
-          <a class="nav-link fw-bold py-1 px-0" href="/contact">Contact</a>
-        </nav>
-      </div>
-    </header>
-    <div class="container">
-      <div class="card">
-        <div class="chat-header">
-          Chat
-          <div class="d-flex flex-row align-items-center">
-            <i id="minimizeChat" class="fas fa-minus me-3 text-muted fa-xs"
-              >-</i
+  <body class="d-flex h-100 text-center text-bg-dark">
+
+    <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header>
+        <div>
+          <h3 class="float-md-start mb-0">WatchParty</h3>
+          <nav class="nav nav-masthead justify-content-center float-md-end">
+            <a
+              class="nav-link fw-bold py-1 px-0"
+              aria-current="page"
+              href="/"
+              >Home</a
             >
-          </div>
+            <a class="nav-link fw-bold py-1 px-0" href="features">Features</a>
+            <a class="nav-link fw-bold py-1 px-0" href="contact">Contact</a>
+          </nav>
         </div>
-        <div class="chat-window" id="chatWindow">
-          <ul class="message-list"></ul>
-        </div>
-        <div class="chat-input">
-          <input
-            type="text"
-            class="message-input"
-            placeholder="Type your message here"
-          />
-          <button class="send-button">Send</button>
-        </div>
-      </div>
-      <!-- End of .card -->
-      <div class="button-container">
-        <div class="av-buttons">
-          <button class="button" id="audio-btn">
-            <span class="material-symbols-outlined" id="audio-icon">mic</span>
-            <div class="text" id="audio-text">Mute</div>
-          </button>
-          <button class="button" id="video-btn">
-            <span class="material-symbols-outlined" id="video-icon"
-              >videocam</span
-            >
-            <div class="text" id="video-text">Show</div>
-          </button>
-        </div>
-        <div class="av-buttons">
-          <button class="button" id="settings-btn">
-            <span class="material-symbols-outlined">Settings</span>
-            <div>Settings</div>
-          </button>
-          <button class="button">
-            <span class="material-symbols-outlined">playlist_add</span>
-            <div>Playlist</div>
-          </button>
-        </div>
-        <!-- Bootstrap Modal -->
-        <div
-          class="modal fade"
-          id="settingsModal"
-          tabindex="-1"
-          aria-labelledby="settingsModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body"></div>
+      </header>
+
+      <main class="px-3">
+<div style="display: flex; flex-direction: row; height: 100%;">
+          <div class="main-container">
+          <div class="chat-container">
+            <div id="chat-area" class="chat-area">
+              <div align="left" class="chat-message"></div>
+              <div class="clearfix"></div>
             </div>
+            <div class="input-container">
+              <textarea placeholder="Write a message!" type="text" class="form-control input-box"></textarea>
+              <button type="button" class="btn btn-primary send-button">Send</button>
+            </div>
+        <div class="button-container">
+          <div class="av-buttons">
+            <button class="button" id="audio-btn">
+              <span class="material-symbols-outlined" id="audio-icon">mic</span>
+              <div class="text" id="audio-text">Mute</div>
+            </button>
+            <button class="button" id="video-btn">
+              <span class="material-symbols-outlined" id="video-icon"
+                >videocam</span
+              >
+              <div class="text" id="video-text">Show</div>
+            </button>
+            <button class="button" id="settings-btn">
+              <span class="material-symbols-outlined">Settings</span>
+              <div>Settings</div>
+            </button>
+            <button class="button">
+              <span class="material-symbols-outlined">playlist_add</span>
+              <div>Playlist</div>
+            </button>
           </div>
+      </div>
+    </div>
+  </div>
+
+  
+    <div
+      class="modal fade"
+      id="settingsModal"
+      tabindex="-1"
+      aria-labelledby="settingsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-body">
+            <label for="volume">Volume</label>
+            <input type="range" id="volume" min="0" max="100" value="50">
         </div>
-        <div class="video-container">
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+        </div>
         </div>
       </div>
-      <!-- End of .button-container -->
-    </div>
-    <!-- End of .container -->
-    <script src="/socket.io/socket.io.js" defer></script>
-    <script src="/js/room.js" defer></script>
-    <script src="/js/bootstrap.min.js"></script>
+
+      </main>
+
+        <script src="/socket.io/socket.io.js" defer></script>
+        <script src="/js/room.js" defer></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/jquery.min.js" defer></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
   </body>
 </html>
