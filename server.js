@@ -21,7 +21,7 @@ app.get("/features", (req, res) => {
 app.get("/contact", (req, res) => {
   res.render("contact");
 });
-
+  let users ={};
 app.get("/room", (req, res) => {
   res.render("room");
 });
@@ -42,45 +42,59 @@ app.post("/join", (req, res) => {
 app.get("/room/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   // Render the room view (you can customize this according to your frontend framework)
-  res.render(__dirname + "/src/room.ejs");
+  res.render("room");
 });
 
-var clients = 0;
+io.on("connection", (socket) => {
+  console.log("New user connected");
 
-io.on("connection", function (socket) {
-  clients++;
-  socket.emit("newclientconnect", { description: "Hey, welcome!" });
-  socket.broadcast.emit("newclientconnect", {
-    description: clients + " clients connected!",
+  socket.on("join room", ({ room, user_name }) => {
+    if (!isUsernameTaken(user_name)) {
+      users[socket.id] = user_name;
+      socket.join(room);
+      console.log(`User ${user_name} joined room: ${room}`);
+      io.to(room).emit("chat message", {
+        user_name: "System",
+        message: `Welcome, ${user_name}! Enjoy the party`,
+        time: new Date().toLocaleTimeString(),
+      });
+
+      // Notify other users
+      socket.broadcast
+        .to(room)
+        .emit("chat message", {
+          user_name: "System",
+          message: `${user_name} has joined the room`,
+          time: new Date().toLocaleTimeString(),
+        });
+    } else {
+      socket.emit("username taken", "Username is already taken");
+    }
   });
-  socket.on("disconnect", function () {
-    clients--;
-    socket.broadcast.emit("newclientconnect", {
-      description: clients + " clients connected!",
-    });
+
+  socket.on("chat message", ({ room, user_name, message }) => {
+    const time = new Date().toLocaleTimeString();
+    io.to(room).emit("chat message", { user_name, message, time });
   });
-});
 
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+    const user_name = users[socket.id];
+    if (user_name) {
+      const room = Object.keys(socket.rooms)[1]; // Get the room name
+      io.to(room).emit("chat message", {
+        user_name: "System",
+        message: `${user_name} has left the room`,
+        time: new Date().toLocaleTimeString(),
+      });
+      delete users[socket.id];
+    }
+  });
 
-// io.on("connection", (socket) => {
-//   console.log("A user connected");
-
-//   socket.on("join-room", (roomId, userName) => {
-//     socket.join(roomId); // Join the specified room
-//     console.log(`User ${userName} joined room ${roomId}`);
-//     socket.to(roomId).emit("user-joined", userName);
-//     socket.userName = userName;
-//   });
-
-//   socket.on("send-chat-message", (roomId, userId, message) => {
-//     io.to(roomId).emit("chat-message", { userId, message });
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("A user disconnected");
-//     io.to(roomId).emit("user-left", userId);
-//   });
-// });
+  const isUsernameTaken = (user_name) => {
+    return Object.values(users).includes(user_name);
+  };
+});  
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {

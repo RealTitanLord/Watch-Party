@@ -11,17 +11,18 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/cover.css">
     <link rel="stylesheet" href="/css/room.css">
-<!-- <script src="/socket.io/socket.io.js"></script>
-   <script>
-      var socket = io();
-      socket.on('newclientconnect',function(data){
-               document.body.innerHTML = '';
-               document.write(data.description);
+    <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    var chat = document.getElementsByClassName("chat-message")
+    socket.on('broadcast',function(data){
+        document.chat.innerHTML = '';
+        document.write(data.description);
       });
-   </script> -->
+  </script>
   </head>
   <body class="d-flex h-100 text-center text-bg-dark">
 
@@ -47,7 +48,8 @@
           <div class="main-container">
           <div class="chat-container">
             <div id="chat-area" class="chat-area">
-              <div align="left" class="chat-message"></div>
+              <div align="left" class="chat-message">
+              </div>
               <div class="clearfix"></div>
             </div>
             <div class="input-container">
@@ -115,7 +117,59 @@
         <script src="/js/room.js" defer></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/jquery.min.js" defer></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
+        <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const socket = io();
+        const room = 'your-room-name';
+        let userName = prompt('Enter your username:');
+        let now = new Date();
+        const time = now.getHours() + ':' + now.getMinutes();
+        
+        
+        socket.emit('join room', { room, user_name: userName });
+
+        socket.on('chat message', ({ user_name, message}) => {
+            const chatArea = document.getElementById('chat-area');
+            const msgDiv = document.createElement('div');
+            if (user_name === 'System') {
+                msgDiv.innerText = message;
+                msgDiv.classList.add('announcement');
+            } else {
+                msgDiv.innerHTML = `<strong>${user_name}</strong>: <br>${message} <span class="time">(${time})</span>`;
+                                if (user_name === userName) {
+                    msgDiv.classList.add('my-message');
+                } else {
+                    msgDiv.classList.add('other-message');
+                }
+            }
+            chatArea.appendChild(msgDiv);
+            chatArea.appendChild(document.createElement('br'));
+        });
+
+        const sendMessage = () => {
+            const inputBox = document.querySelector('.input-box');
+            const message = inputBox.value;
+            if (message.trim() !== '') {
+                inputBox.value = '';
+                socket.emit('chat message', { room, user_name: userName, message });
+            }
+        };
+
+        document.querySelector('.send-button').addEventListener('click', sendMessage);
+
+        document.querySelector('.input-box').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        socket.on('username taken', (message) => {
+            alert(message);
+            userName = prompt('Enter a different username:');
+            socket.emit('join room', { room, user_name: userName });
+        });
+    });
+</script>
   </body>
 </html>

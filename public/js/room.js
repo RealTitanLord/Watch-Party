@@ -44,37 +44,14 @@ document.querySelector("#settings-btn").addEventListener("click", function () {
 	myModal.show();
 });
 
-// Chatbox
-
-io.on("connection", (socket) => {
-  socket.on("chat message", (msg) => {
-    console.log("message: " + msg);
-  });
+//Scorll Bar
+$(window).load(function () {
+  $messages.mCustomScrollbar();
 });
 
-//socket logic
-const userName = prompt("Please enter your name:");
-
-if (userName) {
-	socket.emit("join-room", roomId, userName);
-} else {
-	alert("You must enter a name to join the room.");
-}
-
-function getUsernameFromStorage() {
-	return localStorage.getItem("username");
-}
-
-function storeUsernameInStorage(username) {
-	localStorage.setItem("username", username);
-}
-
-// eslint-disable-next-line no-unused-vars
-function promptForUsername() {
-	let username = getUsernameFromStorage();
-	if (!username) {
-		username = prompt("Enter your username:");
-		storeUsernameInStorage(username);
-	}
-	return username;
+function updateScrollbar() {
+  $messages.mCustomScrollbar("update").mCustomScrollbar("scrollTo", "bottom", {
+    scrollInertia: 10,
+    timeout: 0,
+  });
 }
