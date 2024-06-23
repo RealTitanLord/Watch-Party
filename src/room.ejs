@@ -122,28 +122,26 @@
         const socket = io();
         const room = 'your-room-name';
         let userName = prompt('Enter your username:');
-        let now = new Date();
-        const time = now.getHours() + ':' + now.getMinutes();
-        
         
         socket.emit('join room', { room, user_name: userName });
 
-        socket.on('chat message', ({ user_name, message}) => {
+        socket.on('chat message', ({ user_name, message, time }) => {
             const chatArea = document.getElementById('chat-area');
             const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
             if (user_name === 'System') {
                 msgDiv.innerText = message;
                 msgDiv.classList.add('announcement');
             } else {
                 msgDiv.innerHTML = `<strong>${user_name}</strong>: <br>${message} <span class="time">(${time})</span>`;
-                                if (user_name === userName) {
+                if (user_name === userName) {
                     msgDiv.classList.add('my-message');
                 } else {
                     msgDiv.classList.add('other-message');
                 }
             }
             chatArea.appendChild(msgDiv);
-            chatArea.appendChild(document.createElement('br'));
+            chatArea.appendChild(document.createElement('br')); // Add break after each message
         });
 
         const sendMessage = () => {
